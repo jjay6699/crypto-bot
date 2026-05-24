@@ -1,8 +1,20 @@
 :root {
   color-scheme: dark;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #050909;
-  color: #edf7f4;
+  --bg: #050505;
+  --panel: #101010;
+  --panel-soft: #151515;
+  --field: #191919;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #eeeeee;
+  --muted: #a7a7a7;
+  --accent: #d7d7d7;
+  --accent-strong: #ffffff;
+  --positive: #d6d6d6;
+  --negative: #ff8f9d;
+  background: var(--bg);
+  color: var(--text);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -16,7 +28,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #050909;
+  background: var(--bg);
 }
 
 button,
@@ -41,8 +53,8 @@ button {
   height: 100vh;
   min-width: 0;
   padding: 24px 18px;
-  border-right: 1px solid rgba(255, 255, 255, 0.09);
-  background: #071111;
+  border-right: 1px solid var(--border);
+  background: #090909;
 }
 
 .brand {
@@ -69,7 +81,7 @@ button {
 .sourceLine,
 .feedNote,
 .chartCredit {
-  color: #94aaa6;
+  color: var(--muted);
   font-size: 0.82rem;
 }
 
@@ -95,7 +107,7 @@ button {
 
 .navStack button.active,
 .navStack button:hover {
-  background: #121d1f;
+  background: #181818;
   color: #ffffff;
 }
 
@@ -109,9 +121,9 @@ button {
 .terminalSection,
 .marketSummary,
 .exchangeCard {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #091514;
+  background: var(--panel);
   box-shadow: 0 18px 52px rgba(0, 0, 0, 0.18);
 }
 
@@ -150,7 +162,7 @@ button {
 .panelTitle {
   justify-content: space-between;
   margin-bottom: 14px;
-  color: #dcebe8;
+  color: var(--text);
   font-weight: 800;
 }
 
@@ -175,7 +187,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #81f2b3;
+  color: var(--accent);
   white-space: nowrap;
 }
 
@@ -193,8 +205,8 @@ button {
 
 .eyebrow {
   margin: 0 0 6px;
-  color: #81f2b3;
-  font-size: 0.76rem;
+  color: var(--muted);
+  font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -208,8 +220,8 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(1.85rem, 3vw, 2.75rem);
-  line-height: 1.05;
+  font-size: clamp(1.45rem, 2.05vw, 2rem);
+  line-height: 1.12;
   letter-spacing: 0;
 }
 
@@ -226,19 +238,19 @@ h2 {
   gap: 9px;
   min-height: 40px;
   padding: 0 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
-  background: #101b1d;
+  background: var(--field);
   color: #ffffff;
 }
 
 .statusPill {
-  color: #ffcf6f;
+  color: #c7c7c7;
   font-weight: 900;
 }
 
 .statusPill.live {
-  color: #81f2b3;
+  color: var(--accent-strong);
 }
 
 .spin {
@@ -259,9 +271,9 @@ h2 {
 .aiCard,
 .metricStrip {
   min-height: 86px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #0d1819;
+  background: var(--panel);
 }
 
 .aiCard {
@@ -282,7 +294,7 @@ h2 {
   height: 30px;
   border: 0;
   border-radius: 999px;
-  background: #2a3838;
+  background: #2a2a2a;
 }
 
 .switch span {
@@ -297,7 +309,7 @@ h2 {
 }
 
 .switch.on {
-  background: #1fd184;
+  background: #f2f2f2;
 }
 
 .switch.on span {
@@ -319,7 +331,7 @@ h2 {
   min-width: 0;
   min-height: 84px;
   padding: 16px 20px;
-  background: #0d1819;
+  background: var(--panel);
 }
 
 .metricStrip strong,
@@ -336,7 +348,7 @@ h2 {
 .marketSummary span {
   display: block;
   min-width: 0;
-  color: #9fb5b1;
+  color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.2;
 }
@@ -363,7 +375,7 @@ h2 {
   padding: 16px 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: #0d1819;
+  background: var(--panel);
 }
 
 .setupMetric span {
@@ -397,7 +409,7 @@ h2 {
   gap: 8px;
   min-height: 82px;
   padding: 16px 20px;
-  background: #0d1819;
+  background: var(--panel);
 }
 
 .signalPanel {
@@ -432,7 +444,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: #dcebe8;
-  background: #101b1d;
+  background: var(--field);
   font-size: 0.9rem;
 }
 
@@ -481,8 +493,8 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
   outline: 0;
-  background: #101b1d;
-  color: #edf7f4;
+  background: var(--field);
+  color: var(--text);
 }
 
 .terminalSelect {
@@ -507,7 +519,7 @@ h2 {
   padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: #101b1d;
+  background: var(--field);
 }
 
 .timeframes button {
@@ -522,8 +534,8 @@ h2 {
 }
 
 .timeframes button.active {
-  background: #1fd184;
-  color: #031211;
+  background: #eeeeee;
+  color: #080808;
 }
 
 .feedNote {
@@ -542,7 +554,7 @@ h2 {
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
-  background: #071110;
+  background: #080808;
 }
 
 .tickerStrip strong {
@@ -564,7 +576,7 @@ h2 {
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
-  background: #071110;
+  background: #080808;
 }
 
 .chartPanel {
@@ -626,7 +638,7 @@ h2 {
 }
 
 .bookRow.bid::before {
-  background: #1fd184;
+  background: #d6d6d6;
 }
 
 .bookRow.ask span:first-child,
@@ -636,7 +648,7 @@ h2 {
 
 .bookRow.bid span:first-child,
 .positive {
-  color: #81f2b3;
+  color: var(--positive);
 }
 
 .bookRow span {
@@ -656,7 +668,7 @@ h2 {
   margin: 10px 0;
   padding: 10px 8px;
   border-block: 1px solid rgba(255, 255, 255, 0.08);
-  color: #edf7f4;
+  color: var(--text);
   font-size: 1.18rem;
 }
 
@@ -675,14 +687,14 @@ h2 {
   min-height: 38px;
   border: 0;
   border-radius: 8px;
-  background: #101b1d;
+  background: var(--field);
   color: #a6bbb7;
   font-weight: 900;
 }
 
 .sideTabs .buy.active {
-  background: rgba(31, 209, 132, 0.18);
-  color: #81f2b3;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--accent-strong);
 }
 
 .sideTabs .sell.active {
@@ -711,8 +723,8 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
   outline: 0;
-  background: #101b1d;
-  color: #edf7f4;
+  background: var(--field);
+  color: var(--text);
 }
 
 .placeOrder,
@@ -724,13 +736,14 @@ h2 {
   min-height: 44px;
   border: 0;
   border-radius: 8px;
-  color: #031211;
+  color: #080808;
   font-weight: 950;
 }
 
 .placeOrder.buy,
 .addPairButton {
-  background: #1fd184;
+  background: #eeeeee;
+  color: #080808;
 }
 
 .placeOrder.sell {
@@ -753,7 +766,7 @@ h2 {
   min-height: 34px;
   padding: 0 9px;
   border-radius: 6px;
-  background: #101b1d;
+  background: var(--field);
   font-size: 0.78rem;
 }
 
@@ -793,8 +806,8 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
   outline: 0;
-  background: #101b1d;
-  color: #edf7f4;
+  background: var(--field);
+  color: var(--text);
 }
 
 .advancedGrid select {
@@ -815,7 +828,7 @@ h2 {
 .wideControl input[type="range"] {
   min-height: 6px;
   padding: 0;
-  accent-color: #1fd184;
+  accent-color: #eeeeee;
 }
 
 .wideControl b {
@@ -854,7 +867,7 @@ h2 {
   padding: 9px 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  background: #101b1d;
+  background: var(--field);
 }
 
 .pairRow strong,
@@ -907,7 +920,7 @@ h2 {
   padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  background: #101b1d;
+  background: var(--field);
   color: #a6bbb7;
 }
 
@@ -980,7 +993,7 @@ h2 {
 }
 
 .changePill.positive {
-  background: rgba(35, 209, 139, 0.12);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .changePill.negative {
@@ -1000,7 +1013,7 @@ h2 {
 }
 
 .sparklineUp {
-  stroke: #23d18b;
+  stroke: #d6d6d6;
 }
 
 .sparklineDown {
@@ -1015,7 +1028,7 @@ h2 {
 
 .exchangeCard strong {
   margin-bottom: 8px;
-  color: #81f2b3;
+  color: var(--accent-strong);
   font-size: 1.35rem;
 }
 
