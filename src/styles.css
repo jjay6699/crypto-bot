@@ -411,6 +411,8 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  width: fit-content;
+  align-self: flex-start;
 }
 
 .onlineDot {
@@ -1793,7 +1795,8 @@ h2 {
   }
 
   .signalPanel {
-    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
     min-height: 0;
   }
 
