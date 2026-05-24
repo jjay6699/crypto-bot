@@ -325,6 +325,8 @@ function App() {
   const [confidence, setConfidence] = useState('72');
   const [tradeSide, setTradeSide] = useState('buy');
   const [tradeAmount, setTradeAmount] = useState('0.10');
+  const [ticketOpen, setTicketOpen] = useState(true);
+  const [orders, setOrders] = useState([]);
   const [activeSymbol, setActiveSymbol] = useState('BTCUSDT');
   const [activeInterval, setActiveInterval] = useState('15m');
   const [activePairs, setActivePairs] = useState([
@@ -475,12 +477,15 @@ function App() {
             setActiveSymbol={setActiveSymbol}
             setTradeAmount={setTradeAmount}
             setTradeSide={setTradeSide}
+            setTicketOpen={setTicketOpen}
+            setOrders={setOrders}
             sourceBase={tradingData.sourceBase}
             status={tradingData.status}
+            ticketOpen={ticketOpen}
             ticker={ticker}
             tradeAmount={tradeAmount}
             tradeSide={tradeSide}
-            trades={tradingData.trades}
+            orders={orders}
             tradingData={tradingData}
           />
         )}
@@ -634,16 +639,36 @@ function TradingView({
   setActiveSymbol,
   setTradeAmount,
   setTradeSide,
+  setTicketOpen,
+  setOrders,
   sourceBase,
   status,
+  ticketOpen,
   ticker,
   tradeAmount,
   tradeSide,
-  trades,
+  orders,
   tradingData
 }) {
   const asks = [...orderBook.asks].slice(0, 12).reverse();
   const bids = orderBook.bids.slice(0, 12);
+
+  function createOrder() {
+    const amount = parseNumber(tradeAmount);
+    if (!amount || !lastPrice) return;
+    const order = {
+      id: `${Date.now()}-${activeSymbol}-${tradeSide}`,
+      side: tradeSide,
+      symbol: activeSymbol,
+      pair: `${activePair.base}/${activePair.quote}`,
+      price: lastPrice,
+      amount,
+      total: amount * lastPrice,
+      type: 'Limit',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    };
+    setOrders((current) => [order, ...current].slice(0, 20));
+  }
 
   return (
     <>
@@ -686,7 +711,7 @@ function TradingView({
           <div><span>Volume</span><strong>{formatCompact(parseNumber(ticker?.quoteVolume))}</strong></div>
         </div>
 
-        <div className="terminalGrid">
+        <div className={ticketOpen ? 'terminalGrid' : 'terminalGrid ticketCollapsed'}>
           <div className="chartPanel">
             <TradingChart candles={tradingData.candles} volumes={tradingData.volumes} liveCandle={tradingData.liveCandle} />
             <div className="chartCredit">Powered by TradingView Lightweight Charts</div>
@@ -704,47 +729,79 @@ function TradingView({
             ))}
           </aside>
 
-          <aside className="ticketPanel">
-            <div className="sideTabs">
-              <button className={tradeSide === 'buy' ? 'buy active' : 'buy'} type="button" onClick={() => setTradeSide('buy')}>Buy</button>
-              <button className={tradeSide === 'sell' ? 'sell active' : 'sell'} type="button" onClick={() => setTradeSide('sell')}>Sell</button>
+          <aside className={ticketOpen ? 'ticketPanel' : 'ticketPanel collapsed'}>
+            <div className="ticketHeader">
+              <strong>Order Ticket</strong>
+              <button type="button" onClick={() => setTicketOpen((value) => !value)}>
+                {ticketOpen ? 'Collapse' : 'Open'}
+              </button>
             </div>
-            <label>
-              <span>Order type</span>
-              <div className="selectWrap">
-                <select defaultValue="limit">
-                  <option value="limit">Limit</option>
-                  <option value="market">Market</option>
-                  <option value="stop">Stop limit</option>
-                </select>
-                <ChevronDown size={16} />
-              </div>
-            </label>
-            <label>
-              <span>Price USDT</span>
-              <input value={lastPrice ? lastPrice.toFixed(2) : ''} readOnly />
-            </label>
-            <label>
-              <span>Amount {activePair.base}</span>
-              <input value={tradeAmount} onChange={(event) => setTradeAmount(event.target.value)} inputMode="decimal" />
-            </label>
-            <button className={tradeSide === 'buy' ? 'placeOrder buy' : 'placeOrder sell'} type="button">
-              {tradeSide === 'buy' ? 'Create Buy Order' : 'Create Sell Order'}
-            </button>
+            {ticketOpen && (
+              <>
+                <div className="sideTabs">
+                  <button className={tradeSide === 'buy' ? 'buy active' : 'buy'} type="button" onClick={() => setTradeSide('buy')}>Buy</button>
+                  <button className={tradeSide === 'sell' ? 'sell active' : 'sell'} type="button" onClick={() => setTradeSide('sell')}>Sell</button>
+                </div>
+                <label>
+                  <span>Order type</span>
+                  <div className="selectWrap">
+                    <select defaultValue="limit">
+                      <option value="limit">Limit</option>
+                      <option value="market">Market</option>
+                      <option value="stop">Stop limit</option>
+                    </select>
+                    <ChevronDown size={16} />
+                  </div>
+                </label>
+                <label>
+                  <span>Price USDT</span>
+                  <input value={lastPrice ? lastPrice.toFixed(2) : ''} readOnly />
+                </label>
+                <label>
+                  <span>Amount {activePair.base}</span>
+                  <input value={tradeAmount} onChange={(event) => setTradeAmount(event.target.value)} inputMode="decimal" />
+                </label>
+                <div className="orderPreview">
+                  <span>Estimated total</span>
+                  <strong>{formatCurrency(parseNumber(tradeAmount) * lastPrice)}</strong>
+                </div>
+                <button className={tradeSide === 'buy' ? 'placeOrder buy' : 'placeOrder sell'} type="button" onClick={createOrder}>
+                  {tradeSide === 'buy' ? 'Create Buy Order' : 'Create Sell Order'}
+                </button>
+              </>
+            )}
           </aside>
         </div>
 
         <section className="tradesPanel">
-          <div className="panelTitle"><span>Recent Trades</span><BarChart3 size={18} /></div>
-          <div className="tradesGrid">
-            {trades.slice(0, 12).map((trade) => (
-              <div className={trade.isBuyerMaker ? 'tradeRow negative' : 'tradeRow positive'} key={trade.id}>
-                <span>{formatCurrency(parseNumber(trade.price))}</span>
-                <span>{parseNumber(trade.qty).toFixed(5)}</span>
-                <span>{new Date(trade.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+          <div className="panelTitle"><span>My Orders</span><BarChart3 size={18} /></div>
+          {orders.length === 0 ? (
+            <div className="emptyOrders">
+              <strong>No orders yet</strong>
+              <span>Create a buy or sell order from the ticket to populate this panel.</span>
+            </div>
+          ) : (
+            <div className="ordersGrid">
+              <div className="ordersHead">
+                <span>Side</span>
+                <span>Pair</span>
+                <span>Price</span>
+                <span>Amount</span>
+                <span>Total</span>
+                <span>Time</span>
               </div>
-            ))}
-          </div>
+              {orders.map((order) => (
+                <div className="orderRow" key={order.id}>
+                  <span className={order.side === 'buy' ? 'positive' : 'negative'}>{order.side.toUpperCase()}</span>
+                  <span>{order.pair}</span>
+                  <span>{formatCurrency(order.price)}</span>
+                  <span>{order.amount.toFixed(5)}</span>
+                  <span>{formatCurrency(order.total)}</span>
+                  <span>{order.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <p className="sourceLine">Current source: {sourceBase}</p>
