@@ -552,6 +552,17 @@ function PageHeader({ eyebrow, title, action }) {
   );
 }
 
+function OnlineStatus({ status }) {
+  const online = status === 'Live';
+
+  return (
+    <span className={online ? 'onlineStatus online' : 'onlineStatus'}>
+      <span className="onlineDot" />
+      <span>{online ? 'Online' : 'Connecting'}</span>
+    </span>
+  );
+}
+
 function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onRefresh, setAiGuided, topMovers }) {
   const leaders = coins.slice(0, 12);
   const totalVolume = leaders.reduce((sum, coin) => sum + parseNumber(coin.total_volume), 0);
@@ -651,12 +662,12 @@ function TradingView({
   const asks = [...orderBook.asks].slice(0, 12).reverse();
   const bids = orderBook.bids.slice(0, 12);
 
-  function createOrder() {
+  function createOrder(side = tradeSide) {
     const amount = parseNumber(tradeAmount);
     if (!amount || !lastPrice) return;
     const order = {
-      id: `${Date.now()}-${activeSymbol}-${tradeSide}`,
-      side: tradeSide,
+      id: `${Date.now()}-${activeSymbol}-${side}`,
+      side,
       symbol: activeSymbol,
       pair: `${activePair.base}/${activePair.quote}`,
       price: lastPrice,
@@ -673,7 +684,7 @@ function TradingView({
       <PageHeader
         eyebrow="Trading terminal"
         title={`${activePair.base}/${activePair.quote}`}
-        action={<span className={status === 'Live' ? 'statusPill live' : 'statusPill'}>{status}</span>}
+        action={<OnlineStatus status={status} />}
       />
 
       <section className="terminalSection fullTerminal">
@@ -762,9 +773,28 @@ function TradingView({
                   <span>Estimated total</span>
                   <strong>{formatCurrency(parseNumber(tradeAmount) * lastPrice)}</strong>
                 </div>
-                <button className={tradeSide === 'buy' ? 'placeOrder buy' : 'placeOrder sell'} type="button" onClick={createOrder}>
-                  {tradeSide === 'buy' ? 'Create Buy Order' : 'Create Sell Order'}
-                </button>
+                <div className="dualOrderActions">
+                  <button
+                    className={`placeOrder buy ${tradeSide === 'buy' ? 'selected' : ''}`}
+                    type="button"
+                    onClick={() => {
+                      setTradeSide('buy');
+                      createOrder('buy');
+                    }}
+                  >
+                    Buy Order
+                  </button>
+                  <button
+                    className={`placeOrder sell ${tradeSide === 'sell' ? 'selected' : ''}`}
+                    type="button"
+                    onClick={() => {
+                      setTradeSide('sell');
+                      createOrder('sell');
+                    }}
+                  >
+                    Sell Order
+                  </button>
+                </div>
               </>
             </aside>
           )}
