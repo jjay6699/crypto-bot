@@ -1,7 +1,7 @@
 :root {
   color-scheme: dark;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #07110f;
+  background: #050909;
   color: #edf7f4;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,11 +16,12 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #060c0d;
+  background: #050909;
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -30,7 +31,7 @@ button {
 
 .appShell {
   display: grid;
-  grid-template-columns: 292px minmax(0, 1fr);
+  grid-template-columns: 270px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -38,59 +39,20 @@ button {
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: 28px 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  background: #071211;
   min-width: 0;
-}
-
-.brand,
-.navStack a,
-.exchangeRow,
-.aiCard,
-.metricStrip,
-.panelTitle,
-.moverRow,
-.marketHeader,
-.tableHead,
-.tokenRow,
-.assetCell,
-.signalStats,
-.terminalHeader,
-.terminalControls,
-.timeframes,
-.chartStats,
-.bookHead,
-.bookRow,
-.sideTabs {
-  display: flex;
-  align-items: center;
+  padding: 24px 18px;
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  background: #071111;
 }
 
 .brand {
-  margin-bottom: 34px;
-}
-
-.aiIcon {
   display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  background: #1fd184;
-  color: #031211;
-}
-
-.brand strong,
-.aiCard strong,
-.tokenRow strong,
-.moverRow strong,
-.exchangeRow strong {
-  display: block;
+  gap: 3px;
+  margin-bottom: 28px;
 }
 
 .brand strong {
-  font-size: 1.15rem;
+  font-size: 1.18rem;
 }
 
 .brand span,
@@ -99,55 +61,92 @@ button {
 .assetCell span,
 .aiCard span,
 .metricStrip span,
+.tickerStrip span,
 .marketHeader p,
-.signalPanel p {
-  color: #a6bbb7;
+.signalPanel p,
+.exchangeCard p,
+.sourceLine,
+.feedNote,
+.chartCredit {
+  color: #94aaa6;
   font-size: 0.82rem;
 }
 
 .navStack {
   display: grid;
   gap: 8px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.navStack a {
+.navStack button {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  width: 100%;
   min-height: 44px;
   padding: 0 12px;
+  border: 0;
   border-radius: 8px;
-  color: #c3d3d0;
-  text-decoration: none;
+  background: transparent;
+  color: #b8cbc7;
+  text-align: left;
 }
 
-.navStack a.active,
-.navStack a:hover {
-  background: rgba(255, 255, 255, 0.08);
+.navStack button.active,
+.navStack button:hover {
+  background: #121d1f;
   color: #ffffff;
 }
 
-.exchangePanel,
+.sidebarStatus,
 .signalPanel,
 .moversPanel,
 .marketSection,
 .builderPanel,
 .pairsPanel,
-.terminalSection {
+.terminalSection,
+.exchangeCard {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   background: #091514;
   box-shadow: 0 18px 52px rgba(0, 0, 0, 0.18);
 }
 
-.exchangePanel {
-  padding: 16px;
+.sidebarStatus,
+.signalPanel,
+.moversPanel,
+.builderPanel,
+.pairsPanel,
+.exchangeCard {
+  padding: 18px;
+}
+
+.panelTitle,
+.exchangeRow,
+.aiCard,
+.metricStrip,
+.moverRow,
+.marketHeader,
+.tableHead,
+.tokenRow,
+.assetCell,
+.signalStats,
+.pageHeader,
+.terminalToolbar,
+.tickerStrip,
+.bookHead,
+.bookRow,
+.sideTabs,
+.tradeRow {
+  display: flex;
+  align-items: center;
 }
 
 .panelTitle {
   justify-content: space-between;
   margin-bottom: 14px;
   color: #dcebe8;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .exchangeRow {
@@ -155,6 +154,16 @@ button {
   gap: 12px;
   padding: 13px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.exchangeRow strong,
+.moverRow strong,
+.tokenRow strong,
+.aiCard strong,
+.pairRow strong,
+.exchangeCard strong,
+.tickerStrip strong {
+  display: block;
 }
 
 .readyDot {
@@ -168,22 +177,20 @@ button {
 .workspace {
   min-width: 0;
   width: 100%;
-  padding: 30px;
+  padding: 26px;
 }
 
-.topbar {
-  display: flex;
-  align-items: flex-start;
+.pageHeader {
   justify-content: space-between;
   gap: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .eyebrow {
   margin: 0 0 6px;
   color: #81f2b3;
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-size: 0.76rem;
+  font-weight: 900;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -196,26 +203,37 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(2rem, 3.4vw, 3.25rem);
-  line-height: 1;
+  font-size: clamp(1.85rem, 3vw, 2.75rem);
+  line-height: 1.05;
   letter-spacing: 0;
-  max-width: 640px;
 }
 
 h2 {
   letter-spacing: 0;
 }
 
-.refreshButton {
+.refreshButton,
+.statusPill,
+.exchangeCard button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 9px;
-  min-height: 42px;
+  min-height: 40px;
   padding: 0 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: #101b1d;
   color: #ffffff;
+}
+
+.statusPill {
+  color: #ffcf6f;
+  font-weight: 900;
+}
+
+.statusPill.live {
+  color: #81f2b3;
 }
 
 .spin {
@@ -235,15 +253,25 @@ h2 {
 
 .aiCard,
 .metricStrip {
-  min-height: 96px;
-  border-radius: 8px;
+  min-height: 92px;
   border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
   background: #111b1d;
 }
 
 .aiCard {
   gap: 14px;
   padding: 18px;
+}
+
+.aiIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: #1fd184;
+  color: #031211;
 }
 
 .aiCard > div:nth-child(2) {
@@ -258,7 +286,6 @@ h2 {
   border: 0;
   border-radius: 999px;
   background: #30403e;
-  transition: background 0.2s ease;
 }
 
 .switch span {
@@ -287,30 +314,15 @@ h2 {
 }
 
 .metricStrip strong {
-  display: block;
   margin-top: 5px;
-  font-size: 1.45rem;
+  font-size: 1.35rem;
 }
 
-.insightsGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
+.dashboardGrid,
 .strategyGrid {
   display: grid;
-  grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
   gap: 16px;
-  margin-bottom: 16px;
-}
-
-.signalPanel,
-.moversPanel,
-.builderPanel,
-.pairsPanel {
-  padding: 20px;
 }
 
 .signalPanel {
@@ -320,7 +332,6 @@ h2 {
 }
 
 .signalPanel h2 {
-  max-width: 620px;
   margin-bottom: 10px;
   font-size: 1.28rem;
 }
@@ -331,10 +342,10 @@ h2 {
 }
 
 .signalStats {
-  gap: 10px;
-  flex-wrap: wrap;
   align-content: flex-start;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
   min-width: 250px;
 }
 
@@ -349,42 +360,55 @@ h2 {
   background: #101b1d;
 }
 
-.builderForm {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.moverRow {
+  justify-content: space-between;
   gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.builderForm label {
-  display: grid;
-  gap: 7px;
+.moverRow img,
+.assetCell img {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+}
+
+.moverRow div {
+  flex: 1;
   min-width: 0;
 }
 
-.builderForm label > span {
-  color: #9ab0ac;
-  font-size: 0.78rem;
-  font-weight: 800;
+.terminalSection {
+  padding: 16px;
 }
 
-.builderForm input,
-.builderForm select {
+.fullTerminal {
+  min-height: calc(100vh - 96px);
+}
+
+.terminalToolbar {
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.terminalSelect select,
+.builderForm select,
+.ticketPanel select {
+  appearance: none;
   width: 100%;
-  min-height: 42px;
+  min-height: 40px;
+  padding: 0 34px 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
+  outline: 0;
   background: #101b1d;
   color: #edf7f4;
-  outline: 0;
 }
 
-.builderForm input {
-  padding: 0 12px;
-}
-
-.builderForm select {
-  appearance: none;
-  padding: 0 34px 0 12px;
+.terminalSelect {
+  width: 160px;
 }
 
 .selectWrap {
@@ -393,26 +417,270 @@ h2 {
 
 .selectWrap svg {
   position: absolute;
-  right: 12px;
   top: 50%;
+  right: 12px;
   color: #a6bbb7;
   pointer-events: none;
   transform: translateY(-50%);
 }
 
+.timeframes {
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: #101b1d;
+}
+
+.timeframes button {
+  min-width: 42px;
+  min-height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #9ab0ac;
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.timeframes button.active {
+  background: #1fd184;
+  color: #031211;
+}
+
+.feedNote {
+  margin-left: auto;
+}
+
+.tickerStrip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tickerStrip div {
+  min-height: 68px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  background: #071110;
+}
+
+.tickerStrip strong {
+  margin-top: 6px;
+  font-size: 1.05rem;
+}
+
+.terminalGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px 270px;
+  gap: 12px;
+}
+
+.chartPanel,
+.orderBookPanel,
+.ticketPanel,
+.tradesPanel {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  background: #071110;
+}
+
+.chartPanel {
+  min-height: 560px;
+  padding: 10px;
+}
+
+.chartCanvas {
+  width: 100%;
+  height: 520px;
+}
+
+.chartCredit {
+  margin: 8px 4px 0;
+}
+
+.orderBookPanel,
+.ticketPanel,
+.tradesPanel {
+  padding: 14px;
+  min-width: 0;
+}
+
+.bookHead,
+.bookRow {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bookHead {
+  margin-bottom: 8px;
+  color: #819693;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.bookRow {
+  position: relative;
+  min-height: 25px;
+  padding: 0 7px;
+  overflow: hidden;
+  border-radius: 5px;
+  color: #dcebe8;
+  font-size: 0.78rem;
+}
+
+.bookRow::before {
+  content: "";
+  position: absolute;
+  inset: 3px 0 3px auto;
+  width: var(--depth);
+  opacity: 0.16;
+}
+
+.bookRow.ask::before {
+  background: #ff5d73;
+}
+
+.bookRow.bid::before {
+  background: #1fd184;
+}
+
+.bookRow.ask span:first-child,
+.negative {
+  color: #ff8e8e;
+}
+
+.bookRow.bid span:first-child,
+.positive {
+  color: #81f2b3;
+}
+
+.bookRow span {
+  position: relative;
+  z-index: 1;
+}
+
+.midPrice {
+  display: block;
+  margin: 10px 0;
+  padding: 10px 8px;
+  border-block: 1px solid rgba(255, 255, 255, 0.08);
+  color: #edf7f4;
+  font-size: 1.18rem;
+}
+
+.ticketPanel {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.sideTabs {
+  gap: 6px;
+}
+
+.sideTabs button {
+  flex: 1;
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  background: #101b1d;
+  color: #a6bbb7;
+  font-weight: 900;
+}
+
+.sideTabs .buy.active {
+  background: rgba(31, 209, 132, 0.18);
+  color: #81f2b3;
+}
+
+.sideTabs .sell.active {
+  background: rgba(255, 93, 115, 0.18);
+  color: #ff8e8e;
+}
+
+.ticketPanel label,
+.builderForm label {
+  display: grid;
+  gap: 7px;
+}
+
+.ticketPanel label > span,
+.builderForm label > span {
+  color: #9ab0ac;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.ticketPanel input,
+.builderForm input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
+  outline: 0;
+  background: #101b1d;
+  color: #edf7f4;
+}
+
+.placeOrder,
 .addPairButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 100%;
-  min-height: 42px;
-  margin-top: 14px;
+  min-height: 44px;
   border: 0;
   border-radius: 8px;
-  background: #1fd184;
   color: #031211;
-  font-weight: 900;
+  font-weight: 950;
+}
+
+.placeOrder.buy,
+.addPairButton {
+  background: #1fd184;
+}
+
+.placeOrder.sell {
+  background: #ff6a7d;
+}
+
+.tradesPanel {
+  margin-top: 12px;
+}
+
+.tradesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tradeRow {
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 9px;
+  border-radius: 6px;
+  background: #101b1d;
+  font-size: 0.78rem;
+}
+
+.sourceLine {
+  margin: 10px 4px 0;
+}
+
+.builderForm {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.addPairButton {
+  width: 100%;
+  margin-top: 14px;
 }
 
 .pairList {
@@ -458,314 +726,19 @@ h2 {
   color: #ff8e8e;
 }
 
-.moverRow {
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.moverRow img,
-.assetCell img {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-}
-
-.moverRow div {
-  flex: 1;
-  min-width: 0;
-}
-
 .marketSection {
   overflow: hidden;
   min-width: 0;
 }
 
-.terminalSection {
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.terminalHeader {
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.terminalHeader h2 {
-  margin-bottom: 0;
-  font-size: 1.55rem;
-}
-
-.terminalControls {
-  gap: 10px;
-}
-
-.terminalSelect select {
-  width: 150px;
-  min-height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 8px;
-  background: #101b1d;
-  color: #edf7f4;
-  appearance: none;
-  padding: 0 34px 0 12px;
-}
-
-.timeframes {
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  background: #101b1d;
-}
-
-.timeframes button {
-  min-width: 42px;
-  min-height: 30px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #9ab0ac;
-  font-size: 0.84rem;
-  font-weight: 800;
-}
-
-.timeframes button.active {
-  background: #1fd184;
-  color: #031211;
-}
-
-.terminalGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px 270px;
-  gap: 14px;
-}
-
-.chartPanel,
-.orderBookPanel,
-.ticketPanel {
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
-  background: #071110;
-}
-
-.chartPanel {
-  min-height: 430px;
-  padding: 16px;
-}
-
-.chartStats {
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-  color: #a6bbb7;
-  font-size: 0.84rem;
-  font-weight: 800;
-}
-
-.candleChart {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(44, minmax(5px, 1fr));
-  align-items: stretch;
-  gap: 5px;
-  height: 360px;
-  overflow: hidden;
-  border-radius: 8px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    #081817;
-  background-size: 100% 72px, 72px 100%, 100% 100%;
-}
-
-.candleSlot {
-  position: relative;
-  min-width: 0;
-}
-
-.wick,
-.candle {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.wick {
-  width: 2px;
-  min-height: 18px;
-}
-
-.candle {
-  width: min(13px, 80%);
-  min-height: 8px;
-  border-radius: 3px;
-}
-
-.wick.up,
-.candle.up {
-  background: #1fd184;
-}
-
-.wick.down,
-.candle.down {
-  background: #ff5d73;
-}
-
-.orderBookPanel,
-.ticketPanel {
-  padding: 14px;
-  min-width: 0;
-}
-
-.bookHead,
-.bookRow {
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.bookHead {
-  color: #819693;
-  font-size: 0.74rem;
-  font-weight: 900;
-  margin-bottom: 8px;
-}
-
-.bookRow {
-  position: relative;
-  min-height: 26px;
-  padding: 0 7px;
-  overflow: hidden;
-  border-radius: 5px;
-  color: #dcebe8;
-  font-size: 0.78rem;
-}
-
-.bookRow::before {
-  content: "";
-  position: absolute;
-  inset: 3px 0 3px auto;
-  width: var(--depth);
-  opacity: 0.16;
-}
-
-.bookRow.ask::before {
-  background: #ff5d73;
-}
-
-.bookRow.bid::before {
-  background: #1fd184;
-}
-
-.bookRow.ask span:first-child {
-  color: #ff8e8e;
-}
-
-.bookRow.bid span:first-child {
-  color: #81f2b3;
-}
-
-.bookRow span {
-  position: relative;
-  z-index: 1;
-}
-
-.midPrice {
-  display: block;
-  margin: 10px 0;
-  padding: 10px 8px;
-  border-block: 1px solid rgba(255, 255, 255, 0.08);
-  color: #edf7f4;
-  font-size: 1.2rem;
-}
-
-.ticketPanel {
-  display: grid;
-  align-content: start;
-  gap: 12px;
-}
-
-.sideTabs {
-  gap: 6px;
-}
-
-.sideTabs button {
-  flex: 1;
-  min-height: 38px;
-  border: 0;
-  border-radius: 8px;
-  background: #101b1d;
-  color: #a6bbb7;
-  font-weight: 900;
-}
-
-.sideTabs .buy.active {
-  background: rgba(31, 209, 132, 0.18);
-  color: #81f2b3;
-}
-
-.sideTabs .sell.active {
-  background: rgba(255, 93, 115, 0.18);
-  color: #ff8e8e;
-}
-
-.ticketPanel label {
-  display: grid;
-  gap: 7px;
-}
-
-.ticketPanel label > span {
-  color: #9ab0ac;
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
-.ticketPanel input,
-.ticketPanel select {
-  width: 100%;
-  min-height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 8px;
-  background: #101b1d;
-  color: #edf7f4;
-  outline: 0;
-}
-
-.ticketPanel input {
-  padding: 0 12px;
-}
-
-.ticketPanel select {
-  appearance: none;
-  padding: 0 34px 0 12px;
-}
-
-.placeOrder {
-  min-height: 44px;
-  border: 0;
-  border-radius: 8px;
-  color: #031211;
-  font-weight: 950;
-}
-
-.placeOrder.buy {
-  background: #1fd184;
-}
-
-.placeOrder.sell {
-  background: #ff6a7d;
-}
-
 .marketHeader {
   justify-content: space-between;
   gap: 20px;
-  padding: 20px;
+  padding: 18px;
 }
 
-.marketHeader h2 {
-  margin-bottom: 5px;
+.marketHeader p {
+  margin-bottom: 0;
 }
 
 .searchBox {
@@ -773,10 +746,10 @@ h2 {
   align-items: center;
   gap: 8px;
   min-width: min(360px, 100%);
-  min-height: 44px;
+  min-height: 42px;
   padding: 0 12px;
-  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
   background: #101b1d;
   color: #a6bbb7;
 }
@@ -808,7 +781,7 @@ h2 {
   padding: 12px 20px;
   color: #829793;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0;
   background: #111b1d;
@@ -846,15 +819,7 @@ h2 {
   width: fit-content;
   padding: 6px 8px;
   border-radius: 8px;
-  font-weight: 800;
-}
-
-.positive {
-  color: #81f2b3;
-}
-
-.negative {
-  color: #ff8e8e;
+  font-weight: 900;
 }
 
 .changePill.positive {
@@ -885,7 +850,40 @@ h2 {
   stroke: #ff8e8e;
 }
 
-@media (max-width: 980px) {
+.exchangeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.exchangeCard strong {
+  margin-bottom: 8px;
+  color: #81f2b3;
+  font-size: 1.35rem;
+}
+
+.exchangeCard button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 1180px) {
+  .terminalGrid {
+    grid-template-columns: minmax(0, 1fr) 250px;
+  }
+
+  .ticketPanel {
+    grid-column: 1 / -1;
+  }
+
+  .tickerStrip,
+  .tradesGrid,
+  .exchangeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
   .appShell {
     grid-template-columns: 1fr;
   }
@@ -893,32 +891,34 @@ h2 {
   .sidebar {
     position: static;
     height: auto;
-    padding: 18px;
     width: 100%;
     overflow: hidden;
   }
 
   .navStack {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 6px;
   }
 
-  .navStack a {
-    justify-content: center;
+  .navStack button {
+    flex: 0 0 auto;
+    width: auto;
   }
 
-  .exchangePanel {
+  .sidebarStatus {
     display: none;
   }
 
   .workspace {
-    padding: 22px;
+    padding: 18px;
     overflow: hidden;
   }
 
   .controlBand,
+  .dashboardGrid,
   .strategyGrid,
-  .terminalGrid,
-  .insightsGrid {
+  .terminalGrid {
     grid-template-columns: 1fr;
   }
 
@@ -931,51 +931,37 @@ h2 {
     min-width: 0;
   }
 
-  .chartPanel {
-    min-height: 360px;
+  .chartCanvas {
+    height: 430px;
   }
 
-  .candleChart {
-    height: 290px;
+  .chartPanel {
+    min-height: 470px;
   }
 }
 
 @media (max-width: 680px) {
-  .topbar,
-  .terminalHeader,
+  .pageHeader,
+  .terminalToolbar,
   .marketHeader {
-    flex-direction: column;
-  }
-
-  .refreshButton,
-  .searchBox {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .terminalControls {
-    width: 100%;
     align-items: stretch;
     flex-direction: column;
   }
 
-  .terminalSelect select {
+  .refreshButton,
+  .searchBox,
+  .terminalSelect {
     width: 100%;
   }
 
   .timeframes {
-    justify-content: space-between;
-  }
-
-  .navStack {
-    display: flex;
     overflow-x: auto;
-    max-width: 100%;
-    padding-bottom: 6px;
   }
 
-  .navStack a {
-    flex: 0 0 auto;
+  .tickerStrip,
+  .tradesGrid,
+  .exchangeGrid {
+    grid-template-columns: 1fr;
   }
 
   .metricStrip {
@@ -987,10 +973,6 @@ h2 {
 
   .metricStrip strong {
     font-size: 1.05rem;
-  }
-
-  .aiCard {
-    flex-wrap: wrap;
   }
 
   .builderForm {
@@ -1005,16 +987,11 @@ h2 {
     grid-column: 1 / -1;
   }
 
-  .terminalSection {
-    padding: 16px;
+  .chartCanvas {
+    height: 360px;
   }
 
-  .candleChart {
-    grid-template-columns: repeat(32, minmax(5px, 1fr));
-    gap: 4px;
-  }
-
-  .candleSlot:nth-child(-n+12) {
-    display: none;
+  .chartPanel {
+    min-height: 400px;
   }
 }
