@@ -479,7 +479,6 @@ function App() {
             setTradeSide={setTradeSide}
             setTicketOpen={setTicketOpen}
             setOrders={setOrders}
-            sourceBase={tradingData.sourceBase}
             status={tradingData.status}
             ticketOpen={ticketOpen}
             ticker={ticker}
@@ -641,7 +640,6 @@ function TradingView({
   setTradeSide,
   setTicketOpen,
   setOrders,
-  sourceBase,
   status,
   ticketOpen,
   ticker,
@@ -717,7 +715,6 @@ function TradingView({
         <div className={ticketOpen ? 'terminalGrid' : 'terminalGrid ticketCollapsed'}>
           <div className="chartPanel">
             <TradingChart candles={tradingData.candles} volumes={tradingData.volumes} liveCandle={tradingData.liveCandle} />
-            <div className="chartCredit">Powered by TradingView Lightweight Charts</div>
           </div>
 
           <aside className="orderBookPanel">
@@ -774,11 +771,20 @@ function TradingView({
         </div>
 
         <section className="tradesPanel">
-          <div className="panelTitle"><span>My Orders</span><BarChart3 size={18} /></div>
+          <div className="ordersHeader">
+            <div>
+              <span>My Orders</span>
+              <strong>{orders.length} open</strong>
+            </div>
+            <div className="ordersSummary">
+              <span>Notional {formatCurrency(orders.reduce((sum, order) => sum + order.total, 0))}</span>
+              <span>Latest {orders[0]?.time || '-'}</span>
+            </div>
+          </div>
           {orders.length === 0 ? (
             <div className="emptyOrders">
               <strong>No orders yet</strong>
-              <span>Create a buy or sell order from the ticket to populate this panel.</span>
+              <span>Use the order ticket to create your first order.</span>
             </div>
           ) : (
             <div className="ordersGrid">
@@ -803,8 +809,6 @@ function TradingView({
             </div>
           )}
         </section>
-
-        <p className="sourceLine">Current source: {sourceBase}</p>
       </section>
     </>
   );
