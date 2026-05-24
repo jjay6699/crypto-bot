@@ -253,69 +253,61 @@ h2 {
 
 .aiCard,
 .metricStrip {
-  min-height: 92px;
+  min-height: 78px;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
-  background: #111b1d;
+  background: #0d1819;
 }
 
 .aiCard {
-  gap: 14px;
-  padding: 18px;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px;
 }
 
-.aiIcon {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  background: #1fd184;
-  color: #031211;
-}
-
-.aiCard > div:nth-child(2) {
+.aiCard > div:first-child {
   flex: 1;
   min-width: 0;
 }
 
 .switch {
   position: relative;
-  width: 58px;
-  height: 32px;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 30px;
   border: 0;
   border-radius: 999px;
-  background: #30403e;
+  background: #2a3838;
 }
 
 .switch span {
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   background: #ffffff;
   transition: transform 0.2s ease;
 }
 
 .switch.on {
-  background: #23d18b;
+  background: #1fd184;
 }
 
 .switch.on span {
-  transform: translateX(26px);
+  transform: translateX(22px);
 }
 
 .metricStrip {
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 12px;
-  padding: 18px;
+  padding: 16px 18px;
 }
 
 .metricStrip strong {
   margin-top: 5px;
-  font-size: 1.35rem;
+  font-size: 1.22rem;
 }
 
 .dashboardGrid,
@@ -352,8 +344,7 @@ h2 {
 .signalStats span {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 11px;
+  padding: 8px 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: #dcebe8;

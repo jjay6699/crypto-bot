@@ -7,7 +7,6 @@ import {
   BarChart3,
   Check,
   ChevronDown,
-  CircleDollarSign,
   Link2,
   Plus,
   RefreshCw,
@@ -545,7 +544,6 @@ function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onR
 
       <section className="controlBand">
         <div className="aiCard">
-          <div className="aiIcon"><Sparkles size={24} /></div>
           <div>
             <span>AI guided trading</span>
             <strong>{aiGuided ? 'Active strategy guidance' : 'Manual market view'}</strong>
@@ -574,8 +572,8 @@ function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onR
             </p>
           </div>
           <div className="signalStats">
-            <span><CircleDollarSign size={16} /> USD market view</span>
-            <span><ShieldCheck size={16} /> Risk controls set</span>
+            <span>USD market view</span>
+            <span>Risk controls set</span>
           </div>
         </div>
 
@@ -732,7 +730,6 @@ function SetupView(props) {
       <PageHeader eyebrow="Bot setup" title="Strategy controls" />
       <section className="controlBand">
         <div className="aiCard">
-          <div className="aiIcon"><Sparkles size={24} /></div>
           <div>
             <span>AI guided trading</span>
             <strong>{props.aiGuided ? 'Active strategy guidance' : 'Manual market view'}</strong>
