@@ -4,16 +4,17 @@ import {
   Activity,
   ArrowDownRight,
   ArrowUpRight,
-  Bot,
   Check,
   ChevronDown,
   CircleDollarSign,
   Link2,
+  Plus,
   RefreshCw,
   Search,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
+  Trash2,
   WalletCards,
   Zap
 } from 'lucide-react';
@@ -36,6 +37,8 @@ const exchanges = [
   { name: 'Kraken', state: 'Ready', pairs: '680+' },
   { name: 'OKX', state: 'Ready', pairs: '760+' }
 ];
+
+const quotes = ['USDT', 'USDC', 'USD', 'BTC', 'ETH'];
 
 function formatCurrency(value) {
   if (!Number.isFinite(value)) return '$0.00';
@@ -85,6 +88,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState('');
   const [error, setError] = useState('');
+  const [selectedCoinId, setSelectedCoinId] = useState('bitcoin');
+  const [selectedQuote, setSelectedQuote] = useState('USDT');
+  const [selectedExchange, setSelectedExchange] = useState('Binance');
+  const [stopLoss, setStopLoss] = useState('3.5');
+  const [takeProfit, setTakeProfit] = useState('8');
+  const [allocation, setAllocation] = useState('15');
+  const [tradeSide, setTradeSide] = useState('buy');
+  const [tradeAmount, setTradeAmount] = useState('0.10');
+  const [activeTradingCoinId, setActiveTradingCoinId] = useState('bitcoin');
+  const [activePairs, setActivePairs] = useState([
+    { id: 'btc-usdt', base: 'BTC', quote: 'USDT', exchange: 'Binance', stopLoss: '3.5', takeProfit: '8', allocation: '15' },
+    { id: 'eth-usdc', base: 'ETH', quote: 'USDC', exchange: 'Coinbase', stopLoss: '4', takeProfit: '9.5', allocation: '12' }
+  ]);
 
   async function loadMarkets() {
     setLoading(true);
@@ -130,11 +146,78 @@ function App() {
     return Math.round((gainers / Math.max(visible.length, 1)) * 100);
   }, [coins]);
 
+  const selectedCoin = useMemo(() => {
+    return coins.find((coin) => coin.id === selectedCoinId) || coins[0] || FALLBACK_COINS[0];
+  }, [coins, selectedCoinId]);
+
+  const activeTradingCoin = useMemo(() => {
+    return coins.find((coin) => coin.id === activeTradingCoinId) || coins[0] || FALLBACK_COINS[0];
+  }, [coins, activeTradingCoinId]);
+
+  const chartCandles = useMemo(() => {
+    const prices = activeTradingCoin?.sparkline_in_7d?.price || [];
+    const source = prices.length > 20 ? prices.slice(-56) : Array.from({ length: 56 }, (_, index) => {
+      const base = activeTradingCoin?.current_price || 100;
+      return base + Math.sin(index / 3) * base * 0.015 + Math.cos(index / 5) * base * 0.01;
+    });
+    const min = Math.min(...source);
+    const max = Math.max(...source);
+    const spread = max - min || 1;
+
+    return source.slice(-44).map((price, index, arr) => {
+      const previous = arr[index - 1] || price * 0.997;
+      const open = previous;
+      const close = price;
+      const high = Math.max(open, close) * (1 + ((index % 5) + 1) / 1200);
+      const low = Math.min(open, close) * (1 - ((index % 4) + 1) / 1300);
+      return {
+        id: `${index}-${price}`,
+        positive: close >= open,
+        top: ((max - high) / spread) * 100,
+        wick: Math.max(((high - low) / spread) * 100, 7),
+        bodyTop: ((max - Math.max(open, close)) / spread) * 100,
+        body: Math.max((Math.abs(close - open) / spread) * 100, 4)
+      };
+    });
+  }, [activeTradingCoin]);
+
+  const orderBook = useMemo(() => {
+    const price = activeTradingCoin?.current_price || 1;
+    const asks = Array.from({ length: 8 }, (_, index) => ({
+      price: price * (1 + (index + 1) * 0.0018),
+      amount: (0.18 + index * 0.047).toFixed(4),
+      depth: 92 - index * 8
+    }));
+    const bids = Array.from({ length: 8 }, (_, index) => ({
+      price: price * (1 - (index + 1) * 0.0016),
+      amount: (0.22 + index * 0.052).toFixed(4),
+      depth: 88 - index * 7
+    }));
+    return { asks, bids };
+  }, [activeTradingCoin]);
+
+  function addPair() {
+    if (!selectedCoin) return;
+    const nextPair = {
+      id: `${selectedCoin.symbol}-${selectedQuote}-${selectedExchange}-${Date.now()}`,
+      base: selectedCoin.symbol.toUpperCase(),
+      quote: selectedQuote,
+      exchange: selectedExchange,
+      stopLoss,
+      takeProfit,
+      allocation
+    };
+    setActivePairs((pairs) => [nextPair, ...pairs].slice(0, 6));
+  }
+
+  function removePair(pairId) {
+    setActivePairs((pairs) => pairs.filter((pair) => pair.id !== pairId));
+  }
+
   return (
     <main className="appShell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brandMark"><Bot size={22} /></div>
           <div>
             <strong>TradePilot</strong>
             <span>Crypto command desk</span>
@@ -169,7 +252,7 @@ function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">Live market pricing</p>
-            <h1>Crypto trading bot dashboard</h1>
+            <h1>Crypto trading bot</h1>
           </div>
           <button className="refreshButton" type="button" onClick={loadMarkets} disabled={loading}>
             <RefreshCw size={18} className={loading ? 'spin' : ''} />
@@ -210,21 +293,112 @@ function App() {
           </div>
         </section>
 
+        <section className="strategyGrid" id="risk">
+          <div className="builderPanel">
+            <div className="panelTitle">
+              <span>Pair Builder</span>
+              <Plus size={18} />
+            </div>
+
+            <div className="builderForm">
+              <label>
+                <span>Base asset</span>
+                <div className="selectWrap">
+                  <select value={selectedCoinId} onChange={(event) => setSelectedCoinId(event.target.value)}>
+                    {coins.slice(0, 40).map((coin) => (
+                      <option value={coin.id} key={coin.id}>
+                        {coin.symbol.toUpperCase()} - {coin.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={16} />
+                </div>
+              </label>
+
+              <label>
+                <span>Quote</span>
+                <div className="selectWrap">
+                  <select value={selectedQuote} onChange={(event) => setSelectedQuote(event.target.value)}>
+                    {quotes.map((quote) => <option value={quote} key={quote}>{quote}</option>)}
+                  </select>
+                  <ChevronDown size={16} />
+                </div>
+              </label>
+
+              <label>
+                <span>Exchange</span>
+                <div className="selectWrap">
+                  <select value={selectedExchange} onChange={(event) => setSelectedExchange(event.target.value)}>
+                    {exchanges.map((exchange) => <option value={exchange.name} key={exchange.name}>{exchange.name}</option>)}
+                  </select>
+                  <ChevronDown size={16} />
+                </div>
+              </label>
+
+              <label>
+                <span>Stop loss %</span>
+                <input value={stopLoss} onChange={(event) => setStopLoss(event.target.value)} inputMode="decimal" />
+              </label>
+
+              <label>
+                <span>Take profit %</span>
+                <input value={takeProfit} onChange={(event) => setTakeProfit(event.target.value)} inputMode="decimal" />
+              </label>
+
+              <label>
+                <span>Allocation %</span>
+                <input value={allocation} onChange={(event) => setAllocation(event.target.value)} inputMode="decimal" />
+              </label>
+            </div>
+
+            <button className="addPairButton" type="button" onClick={addPair}>
+              <Plus size={17} />
+              Add Pair
+            </button>
+          </div>
+
+          <div className="pairsPanel">
+            <div className="panelTitle">
+              <span>Active Pairs</span>
+              <ShieldCheck size={18} />
+            </div>
+
+            <div className="pairList">
+              {activePairs.map((pair) => (
+                <article className="pairRow" key={pair.id}>
+                  <div>
+                    <strong>{pair.base}/{pair.quote}</strong>
+                    <span>{pair.exchange}</span>
+                  </div>
+                  <span>SL {pair.stopLoss}%</span>
+                  <span>TP {pair.takeProfit}%</span>
+                  <span>{pair.allocation}% size</span>
+                  <button type="button" aria-label={`Remove ${pair.base}/${pair.quote}`} onClick={() => removePair(pair.id)}>
+                    <Trash2 size={16} />
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="insightsGrid">
           <div className="signalPanel">
-            <div className="panelTitle">
-              <span>Bot Signal</span>
-              <Zap size={18} />
+            <div>
+              <div className="panelTitle">
+                <span>Bot Signal</span>
+                <Zap size={18} />
+              </div>
+              <h2>{aiGuided ? 'Watching volume and trend strength' : 'Guidance paused'}</h2>
+              <p>
+                {aiGuided
+                  ? 'The assistant is tracking clean entries, risk limits, and high-volume market moves.'
+                  : 'Turn on guidance when you want the bot to surface trade ideas from the live feed.'}
+              </p>
             </div>
-            <h2>{aiGuided ? 'Scanning momentum, volume, and trend strength' : 'Guidance paused'}</h2>
-            <p>
-              {aiGuided
-                ? 'The assistant is watching high-volume assets and highlighting clean trend shifts.'
-                : 'Turn on guidance when you want the bot to surface trade ideas from the live feed.'}
-            </p>
             <div className="signalStats">
               <span><CircleDollarSign size={16} /> USD market view</span>
-              <span><ShieldCheck size={16} /> Risk aware</span>
+              <span><ShieldCheck size={16} /> Risk controls set</span>
             </div>
           </div>
 
@@ -248,6 +422,112 @@ function App() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        <section className="terminalSection">
+          <div className="terminalHeader">
+            <div>
+              <p className="eyebrow">Trading screen</p>
+              <h2>{activeTradingCoin.symbol.toUpperCase()}/USDT</h2>
+            </div>
+            <div className="terminalControls">
+              <div className="selectWrap terminalSelect">
+                <select value={activeTradingCoinId} onChange={(event) => setActiveTradingCoinId(event.target.value)}>
+                  {coins.slice(0, 30).map((coin) => (
+                    <option value={coin.id} key={coin.id}>
+                      {coin.symbol.toUpperCase()}/USDT
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={16} />
+              </div>
+              <div className="timeframes" aria-label="Timeframes">
+                {['15m', '1H', '4H', '1D'].map((timeframe) => (
+                  <button className={timeframe === '15m' ? 'active' : ''} type="button" key={timeframe}>{timeframe}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="terminalGrid">
+            <div className="chartPanel">
+              <div className="chartStats">
+                <span>Price {formatCurrency(activeTradingCoin.current_price)}</span>
+                <span className={activeTradingCoin.price_change_percentage_24h >= 0 ? 'positive' : 'negative'}>
+                  24h {activeTradingCoin.price_change_percentage_24h >= 0 ? '+' : ''}
+                  {activeTradingCoin.price_change_percentage_24h?.toFixed(2)}%
+                </span>
+                <span>Volume ${formatCompact(activeTradingCoin.total_volume)}</span>
+              </div>
+              <div className="candleChart" aria-label={`${activeTradingCoin.name} price chart`}>
+                {chartCandles.map((candle) => (
+                  <div className="candleSlot" key={candle.id}>
+                    <span
+                      className={candle.positive ? 'wick up' : 'wick down'}
+                      style={{ top: `${candle.top}%`, height: `${candle.wick}%` }}
+                    />
+                    <span
+                      className={candle.positive ? 'candle up' : 'candle down'}
+                      style={{ top: `${candle.bodyTop}%`, height: `${candle.body}%` }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <aside className="orderBookPanel">
+              <div className="panelTitle">
+                <span>Order Book</span>
+                <Activity size={18} />
+              </div>
+              <div className="bookHead">
+                <span>Price</span>
+                <span>Amount</span>
+              </div>
+              {orderBook.asks.map((row) => (
+                <div className="bookRow ask" key={`ask-${row.price}`} style={{ '--depth': `${row.depth}%` }}>
+                  <span>{formatCurrency(row.price)}</span>
+                  <span>{row.amount}</span>
+                </div>
+              ))}
+              <strong className="midPrice">{formatCurrency(activeTradingCoin.current_price)}</strong>
+              {orderBook.bids.map((row) => (
+                <div className="bookRow bid" key={`bid-${row.price}`} style={{ '--depth': `${row.depth}%` }}>
+                  <span>{formatCurrency(row.price)}</span>
+                  <span>{row.amount}</span>
+                </div>
+              ))}
+            </aside>
+
+            <aside className="ticketPanel">
+              <div className="sideTabs">
+                <button className={tradeSide === 'buy' ? 'buy active' : 'buy'} type="button" onClick={() => setTradeSide('buy')}>Buy</button>
+                <button className={tradeSide === 'sell' ? 'sell active' : 'sell'} type="button" onClick={() => setTradeSide('sell')}>Sell</button>
+              </div>
+              <label>
+                <span>Order type</span>
+                <div className="selectWrap">
+                  <select defaultValue="limit">
+                    <option value="limit">Limit</option>
+                    <option value="market">Market</option>
+                    <option value="stop">Stop limit</option>
+                  </select>
+                  <ChevronDown size={16} />
+                </div>
+              </label>
+              <label>
+                <span>Price USDT</span>
+                <input value={activeTradingCoin.current_price?.toFixed(2) || ''} readOnly />
+              </label>
+              <label>
+                <span>Amount {activeTradingCoin.symbol.toUpperCase()}</span>
+                <input value={tradeAmount} onChange={(event) => setTradeAmount(event.target.value)} inputMode="decimal" />
+              </label>
+              <button className={tradeSide === 'buy' ? 'placeOrder buy' : 'placeOrder sell'} type="button">
+                {tradeSide === 'buy' ? 'Create Buy Order' : 'Create Sell Order'}
+              </button>
+            </aside>
           </div>
         </section>
 
