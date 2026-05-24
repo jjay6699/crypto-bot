@@ -381,6 +381,8 @@ h2 {
 
 .terminalSection {
   padding: 16px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .fullTerminal {
@@ -476,12 +478,14 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 260px 270px;
   gap: 12px;
+  min-width: 0;
 }
 
 .chartPanel,
 .orderBookPanel,
 .ticketPanel,
 .tradesPanel {
+  min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
   background: #071110;
@@ -494,6 +498,7 @@ h2 {
 
 .chartCanvas {
   width: 100%;
+  max-width: 100%;
   height: 520px;
 }
 
@@ -512,6 +517,7 @@ h2 {
 .bookRow {
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
 }
 
 .bookHead {
@@ -560,6 +566,13 @@ h2 {
 .bookRow span {
   position: relative;
   z-index: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.bookRow span:last-child,
+.bookHead span:last-child {
+  text-align: right;
 }
 
 .midPrice {
@@ -915,6 +928,10 @@ h2 {
     overflow: hidden;
   }
 
+  .terminalSection {
+    padding: 12px;
+  }
+
   .controlBand,
   .dashboardGrid,
   .strategyGrid,
@@ -932,15 +949,27 @@ h2 {
   }
 
   .chartCanvas {
-    height: 430px;
+    height: 390px;
   }
 
   .chartPanel {
-    min-height: 470px;
+    min-height: 430px;
   }
 }
 
 @media (max-width: 680px) {
+  body {
+    min-width: 0;
+  }
+
+  .sidebar {
+    padding: 14px 10px;
+  }
+
+  .workspace {
+    padding: 10px;
+  }
+
   .pageHeader,
   .terminalToolbar,
   .marketHeader {
@@ -956,6 +985,8 @@ h2 {
 
   .timeframes {
     overflow-x: auto;
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .tickerStrip,
@@ -988,10 +1019,61 @@ h2 {
   }
 
   .chartCanvas {
-    height: 360px;
+    height: min(340px, 78vw);
   }
 
   .chartPanel {
-    min-height: 400px;
+    min-height: 0;
+    padding: 8px;
+  }
+
+  .terminalSection {
+    padding: 8px;
+  }
+
+  .terminalGrid {
+    gap: 10px;
+  }
+
+  .tickerStrip div {
+    min-height: 58px;
+    padding: 10px;
+  }
+
+  .orderBookPanel,
+  .ticketPanel,
+  .tradesPanel {
+    padding: 12px;
+    width: 100%;
+  }
+
+  .orderBookPanel {
+    max-height: 440px;
+    overflow-y: auto;
+  }
+
+  .tradesPanel {
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .bookRow,
+  .bookHead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(90px, max-content);
+  }
+
+  .bookRow {
+    min-height: 29px;
+    font-size: 0.82rem;
+  }
+
+  .tradesGrid {
+    gap: 6px;
+  }
+
+  .tradeRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(72px, max-content) minmax(72px, max-content);
   }
 }
