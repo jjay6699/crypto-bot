@@ -7,6 +7,7 @@ import {
   BarChart3,
   Check,
   ChevronDown,
+  CircleDollarSign,
   Link2,
   Plus,
   RefreshCw,
