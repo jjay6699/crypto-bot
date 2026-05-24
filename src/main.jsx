@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Search,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Trash2,
   WalletCards,
@@ -157,36 +158,36 @@ function TradingChart({ candles, volumes, liveCandle }) {
     const chart = createChart(containerRef.current, {
       autoSize: true,
       layout: {
-        background: { color: '#071110' },
-        textColor: '#8da39f',
+        background: { color: '#080c1c' },
+        textColor: '#94a3b8',
         attributionLogo: false
       },
       grid: {
-        vertLines: { color: 'rgba(255,255,255,0.045)' },
-        horzLines: { color: 'rgba(255,255,255,0.045)' }
+        vertLines: { color: 'rgba(255, 255, 255, 0.03)' },
+        horzLines: { color: 'rgba(255, 255, 255, 0.03)' }
       },
       crosshair: { mode: 1 },
-      rightPriceScale: { borderColor: 'rgba(255,255,255,0.08)' },
+      rightPriceScale: { borderColor: 'rgba(255, 255, 255, 0.05)' },
       timeScale: {
-        borderColor: 'rgba(255,255,255,0.08)',
+        borderColor: 'rgba(255, 255, 255, 0.05)',
         timeVisible: true,
         secondsVisible: false
       }
     });
 
     const candleSeries = chart.addSeries(CandlestickSeries, {
-      upColor: '#1fd184',
-      downColor: '#ff5d73',
-      borderUpColor: '#1fd184',
-      borderDownColor: '#ff5d73',
-      wickUpColor: '#1fd184',
-      wickDownColor: '#ff5d73'
+      upColor: '#10b981',
+      downColor: '#f43f5e',
+      borderUpColor: '#10b981',
+      borderDownColor: '#f43f5e',
+      wickUpColor: '#10b981',
+      wickDownColor: '#f43f5e'
     });
 
     const volumeSeries = chart.addSeries(HistogramSeries, {
       priceFormat: { type: 'volume' },
       priceScaleId: '',
-      color: 'rgba(31, 209, 132, 0.28)'
+      color: 'rgba(16, 185, 129, 0.15)'
     });
     volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
 
@@ -594,7 +595,26 @@ function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onR
         </div>
 
         <div className="metricStrip">
-          <div><span>Market pulse</span><strong>{marketPulse}%</strong></div>
+          <div>
+            <span>Market pulse</span>
+            <strong>{marketPulse}%</strong>
+            <div style={{
+              width: '100%',
+              height: '4px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '99px',
+              overflow: 'hidden',
+              marginTop: '8px'
+            }}>
+              <div style={{
+                width: `${marketPulse}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, var(--accent) 0%, var(--positive) 100%)',
+                borderRadius: '99px',
+                transition: 'width 0.5s ease-out'
+              }} />
+            </div>
+          </div>
           <div><span>Tracked assets</span><strong>{coins.length}</strong></div>
           <div><span>Updated</span><strong>{lastUpdated || 'Now'}</strong></div>
         </div>
@@ -798,6 +818,7 @@ function TradingView({
           </div>
           {orders.length === 0 ? (
             <div className="emptyOrders">
+              <WalletCards size={28} style={{ color: 'var(--muted-soft)', marginBottom: '4px' }} />
               <strong>No orders yet</strong>
               <span>Use the order ticket to create your first order.</span>
             </div>
@@ -856,9 +877,66 @@ function SetupView(props) {
             <span />
           </button>
         </div>
-        <div className="setupMetric"><span>Active pairs</span><strong>{props.activePairs.length}/{props.maxPairs}</strong></div>
-        <div className="setupMetric"><span>Capital assigned</span><strong>{totalAllocation}%</strong></div>
-        <div className="setupMetric"><span>Daily loss cap</span><strong>{props.dailyLossCap}%</strong></div>
+        <div className="setupMetric">
+          <span>Active pairs</span>
+          <strong>{props.activePairs.length}/{props.maxPairs}</strong>
+          <div style={{
+            width: '100%',
+            height: '4px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '99px',
+            overflow: 'hidden',
+            marginTop: '8px'
+          }}>
+            <div style={{
+              width: `${(props.activePairs.length / (parseNumber(props.maxPairs) || 6)) * 100}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, var(--accent) 0%, var(--accent-strong) 100%)',
+              borderRadius: '99px',
+              transition: 'width 0.5s ease-out'
+            }} />
+          </div>
+        </div>
+        <div className="setupMetric">
+          <span>Capital assigned</span>
+          <strong>{totalAllocation}%</strong>
+          <div style={{
+            width: '100%',
+            height: '4px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '99px',
+            overflow: 'hidden',
+            marginTop: '8px'
+          }}>
+            <div style={{
+              width: `${Math.min(totalAllocation, 100)}%`,
+              height: '100%',
+              background: totalAllocation > 90 ? 'var(--negative)' : 'linear-gradient(90deg, var(--accent) 0%, var(--positive) 100%)',
+              borderRadius: '99px',
+              transition: 'width 0.5s ease-out'
+            }} />
+          </div>
+        </div>
+        <div className="setupMetric">
+          <span>Daily loss cap</span>
+          <strong>{props.dailyLossCap}%</strong>
+          <div style={{
+            width: '100%',
+            height: '4px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '99px',
+            overflow: 'hidden',
+            marginTop: '8px'
+          }}>
+            <div style={{
+              width: `${Math.min((parseNumber(props.dailyLossCap) / 20) * 100, 100)}%`,
+              height: '100%',
+              background: 'var(--negative)',
+              borderRadius: '99px',
+              transition: 'width 0.5s ease-out'
+            }} />
+          </div>
+        </div>
       </section>
       <section className="strategyGrid">
         <div className="setupStack">
@@ -954,7 +1032,7 @@ function AdvancedControls({
 }) {
   return (
     <div className="advancedPanel">
-      <div className="panelTitle"><span>Advanced Rules</span><SlidersHorizontalIcon /></div>
+      <div className="panelTitle"><span>Advanced Rules</span><SlidersHorizontal size={18} /></div>
       <div className="advancedGrid">
         <label>
           <span>Execution mode</span>
@@ -980,9 +1058,7 @@ function AdvancedControls({
   );
 }
 
-function SlidersHorizontalIcon() {
-  return <Activity size={18} />;
-}
+// SlidersHorizontalIcon is replaced directly by lucide-react SlidersHorizontal
 
 function ActivePairs({ activePairs, removePair }) {
   return (
