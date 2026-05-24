@@ -700,6 +700,9 @@ function TradingView({
               </button>
             ))}
           </div>
+          <button className="ticketToggle" type="button" onClick={() => setTicketOpen((value) => !value)}>
+            {ticketOpen ? 'Hide Order Ticket' : 'Show Order Ticket'}
+          </button>
           <span className="feedNote">Binance market feed</span>
         </div>
 
@@ -729,14 +732,11 @@ function TradingView({
             ))}
           </aside>
 
-          <aside className={ticketOpen ? 'ticketPanel' : 'ticketPanel collapsed'}>
-            <div className="ticketHeader">
-              <strong>Order Ticket</strong>
-              <button type="button" onClick={() => setTicketOpen((value) => !value)}>
-                {ticketOpen ? 'Collapse' : 'Open'}
-              </button>
-            </div>
-            {ticketOpen && (
+          {ticketOpen && (
+            <aside className="ticketPanel">
+              <div className="ticketHeader">
+                <strong>Order Ticket</strong>
+              </div>
               <>
                 <div className="sideTabs">
                   <button className={tradeSide === 'buy' ? 'buy active' : 'buy'} type="button" onClick={() => setTradeSide('buy')}>Buy</button>
@@ -769,8 +769,8 @@ function TradingView({
                   {tradeSide === 'buy' ? 'Create Buy Order' : 'Create Sell Order'}
                 </button>
               </>
-            )}
-          </aside>
+            </aside>
+          )}
         </div>
 
         <section className="tradesPanel">

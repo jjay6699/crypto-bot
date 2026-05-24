@@ -570,7 +570,7 @@ h2 {
 }
 
 .terminalGrid.ticketCollapsed {
-  grid-template-columns: minmax(0, 1fr) 280px 118px;
+  grid-template-columns: minmax(0, 1fr) 280px;
 }
 
 .chartPanel,
@@ -591,8 +591,12 @@ h2 {
 .chartCanvas {
   width: 100%;
   max-width: 100%;
-  height: min(58vh, 560px);
-  min-height: 430px;
+  height: clamp(430px, 58vh, 560px);
+}
+
+.orderBookPanel {
+  max-height: calc(clamp(430px, 58vh, 560px) + 43px);
+  overflow-y: auto;
 }
 
 .chartCredit {
@@ -683,15 +687,21 @@ h2 {
   gap: 12px;
 }
 
-.ticketPanel.collapsed {
-  align-content: start;
-}
-
 .ticketHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.ticketToggle {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--text);
+  white-space: nowrap;
 }
 
 .ticketHeader button {
@@ -1106,15 +1116,11 @@ h2 {
   }
 
   .terminalGrid.ticketCollapsed {
-    grid-template-columns: minmax(0, 1fr) 110px;
+    grid-template-columns: minmax(0, 1fr) 250px;
   }
 
   .ticketPanel {
     grid-column: 1 / -1;
-  }
-
-  .ticketPanel.collapsed {
-    grid-column: auto;
   }
 
   .tickerStrip,
@@ -1190,7 +1196,10 @@ h2 {
 
   .chartCanvas {
     height: 390px;
-    min-height: 390px;
+  }
+
+  .orderBookPanel {
+    max-height: 433px;
   }
 
   .chartPanel {
@@ -1307,7 +1316,7 @@ h2 {
   }
 
   .orderBookPanel {
-    max-height: 440px;
+    max-height: calc(min(340px, 78vw) + 43px);
     overflow-y: auto;
   }
 
