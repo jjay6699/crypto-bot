@@ -329,6 +329,10 @@ function App() {
 
   const tradingData = useTradingData(activeSymbol, activeInterval);
 
+  function markUpdated() {
+    setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+  }
+
   async function loadMarkets() {
     setLoading(true);
     setError('');
@@ -337,10 +341,10 @@ function App() {
       if (!response.ok) throw new Error('Market feed unavailable');
       const data = await response.json();
       setCoins(data);
-      setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      markUpdated();
     } catch (err) {
       setError('Live feed is warming up. Showing cached market view.');
-      setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      markUpdated();
     } finally {
       setLoading(false);
     }
@@ -530,6 +534,11 @@ function PageHeader({ eyebrow, title, action }) {
 }
 
 function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onRefresh, setAiGuided, topMovers }) {
+  const leaders = coins.slice(0, 12);
+  const totalVolume = leaders.reduce((sum, coin) => sum + parseNumber(coin.total_volume), 0);
+  const gainers = leaders.filter((coin) => coin.price_change_percentage_24h >= 0).length;
+  const strongest = topMovers[0];
+
   return (
     <>
       <PageHeader
@@ -558,6 +567,21 @@ function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onR
           <div><span>Market pulse</span><strong>{marketPulse}%</strong></div>
           <div><span>Tracked assets</span><strong>{coins.length}</strong></div>
           <div><span>Updated</span><strong>{lastUpdated || 'Now'}</strong></div>
+        </div>
+      </section>
+
+      <section className="marketSummary">
+        <div>
+          <span>Top 12 volume</span>
+          <strong>${formatCompact(totalVolume)}</strong>
+        </div>
+        <div>
+          <span>Positive movers</span>
+          <strong>{gainers}/{leaders.length || 0}</strong>
+        </div>
+        <div>
+          <span>Strongest asset</span>
+          <strong>{strongest ? strongest.symbol.toUpperCase() : '-'}</strong>
         </div>
       </section>
 
