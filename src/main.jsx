@@ -713,7 +713,6 @@ function TradingView({
           <button className="ticketToggle" type="button" onClick={() => setTicketOpen((value) => !value)}>
             {ticketOpen ? 'Hide Order Ticket' : 'Show Order Ticket'}
           </button>
-          <span className="feedNote">Binance market feed</span>
         </div>
 
         <div className="tickerStrip">
