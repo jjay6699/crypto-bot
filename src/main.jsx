@@ -22,7 +22,7 @@ import { CandlestickSeries, createChart, HistogramSeries } from 'lightweight-cha
 import './styles.css';
 
 const COINS_URL =
-  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=80&page=1&sparkline=true&price_change_percentage=1h,24h,7d';
+  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=1h,24h,7d';
 
 const BINANCE_REST_BASES = ['https://api.binance.com', 'https://api1.binance.com', 'https://api.binance.us'];
 const BINANCE_WS_BASES = {
@@ -318,6 +318,11 @@ function App() {
   const [stopLoss, setStopLoss] = useState('3.5');
   const [takeProfit, setTakeProfit] = useState('8');
   const [allocation, setAllocation] = useState('15');
+  const [executionMode, setExecutionMode] = useState('Balanced');
+  const [maxPairs, setMaxPairs] = useState('6');
+  const [dailyLossCap, setDailyLossCap] = useState('5');
+  const [trailingStop, setTrailingStop] = useState('1.2');
+  const [confidence, setConfidence] = useState('72');
   const [tradeSide, setTradeSide] = useState('buy');
   const [tradeAmount, setTradeAmount] = useState('0.10');
   const [activeSymbol, setActiveSymbol] = useState('BTCUSDT');
@@ -492,15 +497,25 @@ function App() {
             selectedCoinId={selectedCoinId}
             selectedExchange={selectedExchange}
             selectedQuote={selectedQuote}
+            confidence={confidence}
+            dailyLossCap={dailyLossCap}
+            executionMode={executionMode}
+            maxPairs={maxPairs}
             setAiGuided={setAiGuided}
             setAllocation={setAllocation}
+            setConfidence={setConfidence}
+            setDailyLossCap={setDailyLossCap}
+            setExecutionMode={setExecutionMode}
+            setMaxPairs={setMaxPairs}
             setSelectedCoinId={setSelectedCoinId}
             setSelectedExchange={setSelectedExchange}
             setSelectedQuote={setSelectedQuote}
             setStopLoss={setStopLoss}
             setTakeProfit={setTakeProfit}
+            setTrailingStop={setTrailingStop}
             stopLoss={stopLoss}
             takeProfit={takeProfit}
+            trailingStop={trailingStop}
           />
         )}
 
@@ -750,10 +765,12 @@ function BookRow({ amount, price, side }) {
 }
 
 function SetupView(props) {
+  const totalAllocation = props.activePairs.reduce((sum, pair) => sum + parseNumber(pair.allocation), 0);
+
   return (
     <>
       <PageHeader eyebrow="Bot setup" title="Strategy controls" />
-      <section className="controlBand">
+      <section className="setupOverview">
         <div className="aiCard">
           <div>
             <span>AI guided trading</span>
@@ -763,9 +780,15 @@ function SetupView(props) {
             <span />
           </button>
         </div>
+        <div className="setupMetric"><span>Active pairs</span><strong>{props.activePairs.length}/{props.maxPairs}</strong></div>
+        <div className="setupMetric"><span>Capital assigned</span><strong>{totalAllocation}%</strong></div>
+        <div className="setupMetric"><span>Daily loss cap</span><strong>{props.dailyLossCap}%</strong></div>
       </section>
       <section className="strategyGrid">
-        <PairBuilder {...props} />
+        <div className="setupStack">
+          <PairBuilder {...props} />
+          <AdvancedControls {...props} />
+        </div>
         <ActivePairs activePairs={props.activePairs} removePair={props.removePair} />
       </section>
     </>
@@ -775,19 +798,29 @@ function SetupView(props) {
 function PairBuilder({
   addPair,
   allocation,
+  confidence,
   coins,
+  dailyLossCap,
+  executionMode,
   exchanges: exchangeOptions,
+  maxPairs,
   selectedCoinId,
   selectedExchange,
   selectedQuote,
   setAllocation,
+  setConfidence,
+  setDailyLossCap,
+  setExecutionMode,
+  setMaxPairs,
   setSelectedCoinId,
   setSelectedExchange,
   setSelectedQuote,
   setStopLoss,
   setTakeProfit,
+  setTrailingStop,
   stopLoss,
-  takeProfit
+  takeProfit,
+  trailingStop
 }) {
   return (
     <div className="builderPanel">
@@ -831,10 +864,55 @@ function PairBuilder({
   );
 }
 
+function AdvancedControls({
+  confidence,
+  dailyLossCap,
+  executionMode,
+  maxPairs,
+  setConfidence,
+  setDailyLossCap,
+  setExecutionMode,
+  setMaxPairs,
+  setTrailingStop,
+  trailingStop
+}) {
+  return (
+    <div className="advancedPanel">
+      <div className="panelTitle"><span>Advanced Rules</span><SlidersHorizontalIcon /></div>
+      <div className="advancedGrid">
+        <label>
+          <span>Execution mode</span>
+          <div className="selectWrap">
+            <select value={executionMode} onChange={(event) => setExecutionMode(event.target.value)}>
+              <option>Balanced</option>
+              <option>Momentum</option>
+              <option>Conservative</option>
+            </select>
+            <ChevronDown size={16} />
+          </div>
+        </label>
+        <label><span>Max open pairs</span><input value={maxPairs} onChange={(event) => setMaxPairs(event.target.value)} inputMode="numeric" /></label>
+        <label><span>Daily loss cap %</span><input value={dailyLossCap} onChange={(event) => setDailyLossCap(event.target.value)} inputMode="decimal" /></label>
+        <label><span>Trailing stop %</span><input value={trailingStop} onChange={(event) => setTrailingStop(event.target.value)} inputMode="decimal" /></label>
+        <label className="wideControl">
+          <span>Signal confidence</span>
+          <input type="range" min="40" max="95" value={confidence} onChange={(event) => setConfidence(event.target.value)} />
+          <b>{confidence}%</b>
+        </label>
+      </div>
+    </div>
+  );
+}
+
+function SlidersHorizontalIcon() {
+  return <Activity size={18} />;
+}
+
 function ActivePairs({ activePairs, removePair }) {
   return (
     <div className="pairsPanel">
       <div className="panelTitle"><span>Active Pairs</span><ShieldCheck size={18} /></div>
+      <div className="pairHead"><span>Pair</span><span>Risk</span><span>Target</span><span>Size</span></div>
       <div className="pairList">
         {activePairs.map((pair) => (
           <article className="pairRow" key={pair.id}>
@@ -865,7 +943,7 @@ function MarketsView({ error, filteredCoins, loading, onRefresh, query, setQuery
       />
       <section className="marketSection">
         <div className="marketHeader">
-          <p>{error || 'Current prices from a free public crypto market API.'}</p>
+          <p>{error || `${filteredCoins.length} crypto assets from a free public market API.`}</p>
           <label className="searchBox">
             <Search size={18} />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search token" aria-label="Search token" />
@@ -884,7 +962,7 @@ function TokenTable({ coins }) {
         <span>Asset</span><span>Price</span><span>24h</span><span>Volume</span><span>Trend</span>
       </div>
       <div className="tokenList">
-        {coins.slice(0, 24).map((coin) => {
+        {coins.slice(0, 100).map((coin) => {
           const positive = coin.price_change_percentage_24h >= 0;
           return (
             <article className="tokenRow" key={coin.id}>

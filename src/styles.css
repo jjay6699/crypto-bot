@@ -104,6 +104,7 @@ button {
 .moversPanel,
 .marketSection,
 .builderPanel,
+.advancedPanel,
 .pairsPanel,
 .terminalSection,
 .marketSummary,
@@ -118,6 +119,7 @@ button {
 .signalPanel,
 .moversPanel,
 .builderPanel,
+.advancedPanel,
 .pairsPanel,
 .exchangeCard {
   padding: 18px;
@@ -342,8 +344,43 @@ h2 {
 .dashboardGrid,
 .strategyGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
   gap: 16px;
+}
+
+.setupOverview {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.2fr) repeat(3, minmax(160px, 0.45fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.setupMetric {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-height: 86px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: #0d1819;
+}
+
+.setupMetric span {
+  color: #9fb5b1;
+  font-size: 0.8rem;
+}
+
+.setupMetric strong {
+  color: #ffffff;
+  font-size: 1.28rem;
+  line-height: 1;
+}
+
+.setupStack {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
 }
 
 .marketSummary {
@@ -730,6 +767,62 @@ h2 {
   gap: 12px;
 }
 
+.advancedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.advancedGrid label {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.advancedGrid label > span {
+  color: #9ab0ac;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.advancedGrid input,
+.advancedGrid select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
+  outline: 0;
+  background: #101b1d;
+  color: #edf7f4;
+}
+
+.advancedGrid select {
+  appearance: none;
+  padding-right: 34px;
+}
+
+.wideControl {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+}
+
+.wideControl span {
+  grid-column: 1 / -1;
+}
+
+.wideControl input[type="range"] {
+  min-height: 6px;
+  padding: 0;
+  accent-color: #1fd184;
+}
+
+.wideControl b {
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
 .addPairButton {
   width: 100%;
   margin-top: 14px;
@@ -738,6 +831,18 @@ h2 {
 .pairList {
   display: grid;
   gap: 8px;
+}
+
+.pairHead {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) repeat(3, max-content) 34px;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  color: #829793;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .pairRow {
@@ -974,6 +1079,7 @@ h2 {
   .controlBand,
   .dashboardGrid,
   .marketSummary,
+  .setupOverview,
   .strategyGrid,
   .terminalGrid {
     grid-template-columns: 1fr;
@@ -1061,8 +1167,16 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .advancedGrid {
+    grid-template-columns: 1fr;
+  }
+
   .pairRow {
     grid-template-columns: 1fr 34px;
+  }
+
+  .pairHead {
+    display: none;
   }
 
   .pairRow > span {
