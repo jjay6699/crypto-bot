@@ -583,8 +583,8 @@ h2 {
 .ticketPanel select {
   appearance: none;
   width: 100%;
-  min-height: 40px;
-  padding: 0 34px 0 12px;
+  min-height: 38px;
+  padding: 0 34px 0 11px;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
   outline: 0;
@@ -793,7 +793,7 @@ h2 {
 .ticketPanel {
   display: grid;
   align-content: start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .ticketHeader {
@@ -801,6 +801,10 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.ticketHeader strong {
+  font-size: 0.98rem;
 }
 
 .ticketToggle {
@@ -823,35 +827,38 @@ h2 {
 }
 
 .sideTabs {
-  gap: 6px;
+  gap: 8px;
 }
 
 .sideTabs button {
   flex: 1;
-  min-height: 38px;
+  min-height: 34px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: var(--button);
   color: #d0d0d0;
+  font-size: 0.9rem;
   font-weight: 900;
 }
 
 .sideTabs .buy.active {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: var(--button-active);
-  color: #080808;
+  border-color: rgba(35, 214, 126, 0.55);
+  background: #18c46f;
+  color: #03140b;
+  box-shadow: 0 0 0 1px rgba(35, 214, 126, 0.12), 0 12px 28px rgba(24, 196, 111, 0.12);
 }
 
 .sideTabs .sell.active {
-  border-color: rgba(255, 143, 157, 0.35);
-  background: rgba(255, 93, 115, 0.18);
-  color: #ff8e8e;
+  border-color: rgba(255, 91, 112, 0.58);
+  background: #ef4d62;
+  color: #150406;
+  box-shadow: 0 0 0 1px rgba(239, 77, 98, 0.12), 0 12px 28px rgba(239, 77, 98, 0.14);
 }
 
 .ticketPanel label,
 .builderForm label {
   display: grid;
-  gap: 7px;
+  gap: 6px;
 }
 
 .ticketPanel label > span,
@@ -864,8 +871,8 @@ h2 {
 .ticketPanel input,
 .builderForm input {
   width: 100%;
-  min-height: 42px;
-  padding: 0 12px;
+  min-height: 38px;
+  padding: 0 11px;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 8px;
   outline: 0;
@@ -879,45 +886,38 @@ h2 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: 40px;
   border: 0;
   border-radius: 8px;
   color: #080808;
+  font-size: 0.92rem;
   font-weight: 950;
-}
-
-.dualOrderActions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
 }
 
 .placeOrder.buy,
 .addPairButton {
-  background: var(--button-active);
-  color: #080808;
+  background: #18c46f;
+  color: #03140b;
+  box-shadow: 0 12px 30px rgba(24, 196, 111, 0.12);
 }
 
 .placeOrder.sell {
-  background: #2a2a2a;
-  color: #ff9aa7;
-  border: 1px solid rgba(255, 143, 157, 0.35);
+  background: #ef4d62;
+  color: #150406;
+  border: 0;
+  box-shadow: 0 12px 30px rgba(239, 77, 98, 0.14);
 }
 
 .placeOrder:hover {
   transform: translateY(-1px);
 }
 
-.placeOrder.buy:hover,
-.placeOrder.buy.selected {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22), 0 14px 34px rgba(255, 255, 255, 0.08);
+.placeOrder.buy:hover {
+  background: #22d77d;
 }
 
-.placeOrder.sell:hover,
-.placeOrder.sell.selected {
-  background: #ff6a7d;
-  color: #080808;
-  box-shadow: 0 0 0 1px rgba(255, 143, 157, 0.32), 0 14px 34px rgba(255, 106, 125, 0.12);
+.placeOrder.sell:hover {
+  background: #ff5b70;
 }
 
 .tradesPanel {
@@ -1025,9 +1025,13 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0;
+  padding: 8px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+}
+
+.orderPreview strong {
+  font-size: 0.98rem;
 }
 
 .builderForm {

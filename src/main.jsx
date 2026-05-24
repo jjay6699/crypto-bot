@@ -773,28 +773,13 @@ function TradingView({
                   <span>Estimated total</span>
                   <strong>{formatCurrency(parseNumber(tradeAmount) * lastPrice)}</strong>
                 </div>
-                <div className="dualOrderActions">
-                  <button
-                    className={`placeOrder buy ${tradeSide === 'buy' ? 'selected' : ''}`}
-                    type="button"
-                    onClick={() => {
-                      setTradeSide('buy');
-                      createOrder('buy');
-                    }}
-                  >
-                    Buy Order
-                  </button>
-                  <button
-                    className={`placeOrder sell ${tradeSide === 'sell' ? 'selected' : ''}`}
-                    type="button"
-                    onClick={() => {
-                      setTradeSide('sell');
-                      createOrder('sell');
-                    }}
-                  >
-                    Sell Order
-                  </button>
-                </div>
+                <button
+                  className={tradeSide === 'buy' ? 'placeOrder buy' : 'placeOrder sell'}
+                  type="button"
+                  onClick={() => createOrder(tradeSide)}
+                >
+                  {tradeSide === 'buy' ? 'Place Buy Order' : 'Place Sell Order'}
+                </button>
               </>
             </aside>
           )}
