@@ -595,26 +595,7 @@ function DashboardView({ aiGuided, coins, lastUpdated, loading, marketPulse, onR
         </div>
 
         <div className="metricStrip">
-          <div>
-            <span>Market pulse</span>
-            <strong>{marketPulse}%</strong>
-            <div style={{
-              width: '100%',
-              height: '4px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '99px',
-              overflow: 'hidden',
-              marginTop: '8px'
-            }}>
-              <div style={{
-                width: `${marketPulse}%`,
-                height: '100%',
-                background: 'linear-gradient(90deg, var(--accent) 0%, var(--positive) 100%)',
-                borderRadius: '99px',
-                transition: 'width 0.5s ease-out'
-              }} />
-            </div>
-          </div>
+          <div><span>Market pulse</span><strong>{marketPulse}%</strong></div>
           <div><span>Tracked assets</span><strong>{coins.length}</strong></div>
           <div><span>Updated</span><strong>{lastUpdated || 'Now'}</strong></div>
         </div>
@@ -877,66 +858,9 @@ function SetupView(props) {
             <span />
           </button>
         </div>
-        <div className="setupMetric">
-          <span>Active pairs</span>
-          <strong>{props.activePairs.length}/{props.maxPairs}</strong>
-          <div style={{
-            width: '100%',
-            height: '4px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            borderRadius: '99px',
-            overflow: 'hidden',
-            marginTop: '8px'
-          }}>
-            <div style={{
-              width: `${(props.activePairs.length / (parseNumber(props.maxPairs) || 6)) * 100}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, var(--accent) 0%, var(--accent-strong) 100%)',
-              borderRadius: '99px',
-              transition: 'width 0.5s ease-out'
-            }} />
-          </div>
-        </div>
-        <div className="setupMetric">
-          <span>Capital assigned</span>
-          <strong>{totalAllocation}%</strong>
-          <div style={{
-            width: '100%',
-            height: '4px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            borderRadius: '99px',
-            overflow: 'hidden',
-            marginTop: '8px'
-          }}>
-            <div style={{
-              width: `${Math.min(totalAllocation, 100)}%`,
-              height: '100%',
-              background: totalAllocation > 90 ? 'var(--negative)' : 'linear-gradient(90deg, var(--accent) 0%, var(--positive) 100%)',
-              borderRadius: '99px',
-              transition: 'width 0.5s ease-out'
-            }} />
-          </div>
-        </div>
-        <div className="setupMetric">
-          <span>Daily loss cap</span>
-          <strong>{props.dailyLossCap}%</strong>
-          <div style={{
-            width: '100%',
-            height: '4px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            borderRadius: '99px',
-            overflow: 'hidden',
-            marginTop: '8px'
-          }}>
-            <div style={{
-              width: `${Math.min((parseNumber(props.dailyLossCap) / 20) * 100, 100)}%`,
-              height: '100%',
-              background: 'var(--negative)',
-              borderRadius: '99px',
-              transition: 'width 0.5s ease-out'
-            }} />
-          </div>
-        </div>
+        <div className="setupMetric"><span>Active pairs</span><strong>{props.activePairs.length}/{props.maxPairs}</strong></div>
+        <div className="setupMetric"><span>Capital assigned</span><strong>{totalAllocation}%</strong></div>
+        <div className="setupMetric"><span>Daily loss cap</span><strong>{props.dailyLossCap}%</strong></div>
       </section>
       <section className="strategyGrid">
         <div className="setupStack">
