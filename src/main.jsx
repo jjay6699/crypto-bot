@@ -158,7 +158,7 @@ function TradingChart({ candles, volumes, liveCandle }) {
     const chart = createChart(containerRef.current, {
       autoSize: true,
       layout: {
-        background: { color: '#080c1c' },
+        background: { color: '#0d0d0d' },
         textColor: '#94a3b8',
         attributionLogo: false
       },
